@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <title>Freeze - Discordサーバー</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Freezeはあなたの居場所を提供します。">
-  <meta name="keywords" content="Freeze">
-  <meta name="theme-color" content="#00aaff">
-  <meta name="robots" content="index,follow">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#a9ceec" />
 
-  <!-- Open Graph / Twitter Cards -->
-  <meta property="og:title" content="Freeze">
-  <meta property="og:description" content="Freeze は「つっくん」により創設されました。">
-  <meta property="og:image" content="https://via.placeholder.com/1200x630/00aaff/ffffff?text=Freeze+Axis">
-  <meta property="og:url" content="https://example.com/desc.html">
-  <meta property="og:site_name" content="Discordサーバー">
-  <meta name="twitter:card" content="summary_large_image">
+  <title>Freeze公式サイト</title>
+  <meta name="description" content="Discordで活動する多目的グループ“Freeze”の公式サイトです。" />
+
+  <link rel="icon" href="https://i.ibb.co/LyFxxY5/freeze.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:site_name"   content="Freeze" />
+  <meta property="og:title"       content="Freeze公式" />
+  <meta property="og:description" content="Freezeは「つっくん」により創設されました" />
+  <meta property="og:url"         content="" />
+  <meta property="og:image"       content="" />
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
   <style>
-    /* VARIABLES & RESET */
     :root {
       --primary: #00aaff;
       --primary-dark: #0088cc;
@@ -37,27 +37,30 @@
       --text: var(--text-light);
       --card-bg: var(--card-bg-dark);
     }
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    /* Reset */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
-      font-family:'Poppins',sans-serif;
+      font-family: 'Poppins', sans-serif;
       background: var(--bg);
       color: var(--text);
       scroll-behavior: smooth;
-      line-height:1.6;
+      line-height: 1.6;
     }
-    a { text-decoration:none; color:inherit; }
-    ul { list-style:none; }
-    button { font-family:inherit; cursor:pointer; border:none; background:none; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
 
-    /* Canvas for snow */
+    /* Snow Canvas */
     #bg-canvas {
       position: fixed;
       top: 0; left: 0;
       width: 100vw; height: 100vh;
       z-index: 0;
+      pointer-events: none;
     }
 
-    /* Gradient background animation */
+    /* Animated Dark Gradient */
     @keyframes gradientBG {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -69,216 +72,169 @@
       animation: gradientBG 20s ease infinite;
     }
 
-    /* UTILITIES */
-    .container { width:90%; max-width:1200px; margin:0 auto; }
-    .text-center { text-align:center; }
-    .mt-20 { margin-top:20px; }
-    .mb-20 { margin-bottom:20px; }
-    .p-20 { padding:20px; }
-    .btn { display:inline-block; padding:12px 24px; border-radius:50px; text-transform:uppercase; letter-spacing:1px; transition: background var(--transition), transform var(--transition); }
-    .btn-primary { background:var(--primary); color:#fff; }
-    .btn-primary:hover, .btn-primary:focus { background:var(--primary-dark); transform: translateY(-3px); outline:none; }
+    /* Layout Utilities */
+    .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+    .text-center { text-align: center; }
+    .mt-20 { margin-top: 20px; }
+    .mb-20 { margin-bottom: 20px; }
+    .p-20 { padding: 20px; }
+    .btn { display: inline-block; padding: 12px 24px; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; transition: background var(--transition), transform var(--transition); }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover, .btn-primary:focus { background: var(--primary-dark); transform: translateY(-3px); outline: none; }
 
-    /* NAVIGATION */
-    nav {
-      position:fixed; top:0; left:0; width:100%;
-      background:var(--primary);
-      box-shadow:0 2px 5px rgba(0,0,0,0.2);
-      z-index:1000;
-      padding:20px 0; transition: padding var(--transition), background var(--transition);
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      background: var(--primary);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      z-index: 1000;
+      padding: 20px 0;
+      transition: padding var(--transition), background var(--transition);
     }
-    nav.scrolled { padding:10px 0; background:rgba(0,170,255,0.95); }
-    .nav-container { display:flex; justify-content:space-between; align-items:center; }
-    .logo { font-size:1.8em; font-weight:600; color:#fff; letter-spacing:1px; }
-    .logo:focus { outline:2px dashed #fff; }
-    .nav-links { display:flex; gap:20px; }
-    .nav-links a { font-weight:500; transition:color var(--transition); }
-    .nav-links a:hover, .nav-links a:focus { color:#f0f8ff; outline:none; }
-    .hamburger { display:none; flex-direction:column; gap:5px; }
-    .hamburger span { width:25px; height:3px; background:#fff; border-radius:2px; transition:all var(--transition); }
-    .hamburger:focus { outline:2px dashed #fff; }
-    @media(max-width:768px){
-      .nav-links { position:absolute; top:60px; right:20px; flex-direction:column; background:var(--primary); padding:10px 20px; border-radius:5px; display:none; }
-      .nav-links.active { display:flex; }
-      .hamburger { display:flex; }
+    .navbar.scrolled { padding: 10px 0; background: rgba(0,170,255,0.95); }
+    .nav-container { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.8em; font-weight: 600; color: #fff; letter-spacing: 1px; }
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a { font-weight: 500; transition: color var(--transition); }
+    .nav-links a:hover, .nav-links a:focus { color: #f0f8ff; outline: none; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; }
+    .hamburger span { width: 25px; height: 3px; background: #fff; border-radius: 2px; transition: all var(--transition); }
+    @media (max-width: 768px) {
+      .nav-links { position: absolute; top: 60px; right: 20px; flex-direction: column; background: var(--primary); padding: 10px 20px; border-radius: 5px; display: none; }
+      .nav-links.active { display: flex; }
+      .hamburger { display: flex; }
     }
 
-    /* HERO */
+    /* Hero Section */
     .hero {
-      position:relative; height:100vh;
+      position: relative;
+      height: 100vh;
       background: url('https://source.unsplash.com/1600x900/?frozen') no-repeat center/cover;
-      background-attachment:fixed;
-      display:flex; align-items:center; justify-content:center;
+      background-attachment: fixed;
+      display: flex; align-items: center; justify-content: center;
       z-index: 1;
     }
-    @media(max-width:768px){ .hero { background-attachment:scroll; } }
-    .hero::before {
-      content:""; position:absolute; inset:0; background:var(--overlay);
-    }
-    .hero-content {
-      position:relative; z-index:2; text-align:center; padding:0 20px;
-      animation:fadeIn 1.5s ease-out;
-    }
-    .hero-content h1 { font-size:3.5em; margin-bottom:20px; letter-spacing:2px; animation:gentleFloat 5s ease-in-out infinite; }
-    .hero-content p { margin-bottom:15px; animation:fadeInUp 1.5s ease-out; }
+    @media (max-width: 768px) { .hero { background-attachment: scroll; } }
+    .hero::before { content: ""; position: absolute; inset: 0; background: var(--overlay); }
+    .hero-content { position: relative; z-index: 2; text-align: center; padding: 0 20px; animation: fadeIn 1.5s ease-out; }
+    .hero-content h1 { font-size: 3.5em; margin-bottom: 20px; letter-spacing: 2px; animation: gentleFloat 5s ease-in-out infinite; }
+    .hero-content p { margin-bottom: 15px; animation: fadeInUp 1.5s ease-out; }
 
-    /* SCROLL TOP BUTTON */
+    /* Scroll-to-top Button */
     #scrollTop {
-      position:fixed; bottom:30px; right:30px; display:none;
-      width:45px; height:45px; background:var(--primary);
-      border-radius:50%; align-items:center; justify-content:center;
-      cursor:pointer; z-index:1001; transition:opacity var(--transition);
+      position: fixed; bottom: 30px; right: 30px; display: none;
+      width: 45px; height: 45px; background: var(--primary);
+      border-radius: 50%; align-items: center; justify-content: center;
+      color: #fff; font-size: 1.2em;
+      cursor: pointer; z-index: 1001; transition: opacity var(--transition);
     }
-    #scrollTop:focus { outline:2px dashed #fff; }
 
-    /* MODAL */
-    .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7);
-      backdrop-filter:blur(5px); justify-content:center; align-items:center; padding:20px; }
-    .modal[aria-hidden="false"] { display:flex; }
-    .modal-content {
-      background:var(--card-bg); border-radius:12px; max-width:600px; width:100%;
-      padding:30px; position:relative; animation:modalFadeIn 0.4s ease;
-    }
-    .modal-close {
-      position:absolute; top:15px; right:15px; font-size:1.5em; color:var(--text);
-      background:none; border:none; cursor:pointer;
-    }
-    .modal-close:focus { outline:2px dashed var(--primary); }
-
-    /* FOOTER */
-    footer { background:var(--primary); color:#fff; padding:20px 0; }
-    footer a:hover, footer a:focus { color:#f0f8ff; outline:none; }
-
-    /* ANIMATIONS */
-    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-    @keyframes fadeInUp { 0%{opacity:0;transform:translateY(30px);} 100%{opacity:1;transform:translateY(0);} }
-    @keyframes gentleFloat { 0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);} }
-    @keyframes modalFadeIn { from{opacity:0;transform:scale(0.8);} to{opacity:1;transform:scale(1);} }
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes gentleFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
   </style>
 </head>
-<body data-theme="dark">
-  <!-- Canvas：雪アニメーション -->
-  <canvas id="bg-canvas"></canvas>
+<body>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
-  <!-- NAVBAR -->
-  <nav id="navbar">
-    <div class="nav-container container">
-      <div class="logo" tabindex="0">Freeze</div>
-      <button class="hamburger" id="hamburger" aria-label="メニューを開閉" aria-controls="nav-links" aria-expanded="false">
+  <nav id="navbar" class="navbar" role="navigation">
+    <div class="container nav-container">
+      <a href="#hero" class="logo" aria-label="トップに戻る">Freeze</a>
+      <button id="hamburger" class="hamburger" aria-label="メニュー" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
-      <div class="nav-links" id="nav-links">
-        <a href="#hero">トップ</a>
-        <a href="join.html">参加</a>
-      </div>
+      <ul id="nav-links" class="nav-links" aria-hidden="true">
+        <li><a href="#hero">トップ</a></li>
+        <li><a href="join.html">参加</a></li>
+      </ul>
     </div>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero" id="hero" role="banner">
-    <div class="hero-content container">
-      <h1>Freeze にようこそ</h1>
-      <p>つまらない毎日と決別しましょう。<br><span class="tagline">新たな冷気の中で、あなたの物語が始まる。</span></p>
-      <a href="join.html" class="btn btn-primary">今すぐ参加</a>
-    </div>
-  </section>
+  <main>
+    <section id="hero" class="hero">
+      <div class="hero-content container">
+        <h1>Freezeへようこそ</h1>
+        <p>つまらない毎日と決別しましょう。<br><span class="tagline">新たな冷気の中で、あなたの物語が始まる。</span></p>
+        <a href="join.html" class="btn btn-primary">今すぐ参加</a>
+      </div>
+    </section>
+  </main>
 
-  <!-- SCROLL TOP BUTTON -->
-  <button id="scrollTop" aria-label="トップへ戻る">↑</button>
+  <button id="scrollTop" class="scroll-top" aria-label="トップへ戻る">↑</button>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="container text-center p-20">
-      <p>&copy; 2025 Freeze. All Rights Reserved。</p>
+  <footer class="footer">
+    <div class="container footer-content text-center">
+      <p>&copy; 2025 Freeze. All Rights Reserved.</p>
       <p><a href="#hero">トップへ戻る</a></p>
     </div>
   </footer>
 
-  <!-- MODAL -->
-  <div id="modal-feature1" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal-content" tabindex="0">
-      <button class="modal-close" aria-label="閉じる">&times;</button>
-      <h2>Memberの質について</h2>
-      <p>Freezeでは…</p>
-    </div>
-  </div>
-
   <script>
-    (() => {
+    // Snow Animation
+    (function() {
       const canvas = document.getElementById('bg-canvas');
       const ctx = canvas.getContext('2d');
-      let W, H, particles = [], particleCount = 200;
-
-      function resize() {
-        W = canvas.width = window.innerWidth;
-        H = canvas.height = window.innerHeight;
-      }
+      let W, H, snowflakes = [], maxFlakes = 200;
+      function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
       window.addEventListener('resize', resize);
       resize();
 
-      function initParticles() {
-        particles = [];
-        for (let i = 0; i < particleCount; i++) {
-          particles.push({
-            x: Math.random() * W,
-            y: Math.random() * H,
-            r: 1 + Math.random() * 4,  // 大きさ幅を微調整
-            speed: 0.3 + Math.random() * 0.5  // 降下速度を遅めに
-          });
+      class Snowflake {
+        constructor() { this.reset(); }
+        reset() {
+          this.x = Math.random() * W;
+          this.y = Math.random() * H;
+          this.r = Math.random() * 3 + 1;
+          this.vy = Math.random() * 1 + 0.5;
+          this.vx = Math.random() * 0.5 - 0.25;
+          this.o = Math.random() * 0.5 + 0.3;
+        }
+        update() {
+          const wind = Math.sin(Date.now() / 5000) * 0.5;
+          this.x += this.vx + wind;
+          this.y += this.vy;
+          if (this.y > H) { this.y = -10; this.x = Math.random() * W; }
+          if (this.x > W || this.x < 0) this.x = (this.x + W) % W;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+          ctx.fillStyle = `rgba(255,255,255,${this.o})`;
+          ctx.fill();
         }
       }
 
-      function draw() {
-        ctx.clearRect(0, 0, W, H);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.beginPath();
-        particles.forEach(p => {
-          ctx.moveTo(p.x, p.y);
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
-        });
-        ctx.fill();
-
-        // 更新：垂直降下のみ
-        particles.forEach(p => {
-          p.y += p.speed + p.r * 0.05;
-          // 画面外に出たら上に戻す
-          if (p.y > H + 5) {
-            p.y = -10;
-            p.x = Math.random() * W;
-          }
-        });
-
-        requestAnimationFrame(draw);
+      function init() {
+        snowflakes = [];
+        for (let i = 0; i < maxFlakes; i++) snowflakes.push(new Snowflake());
       }
-
-      initParticles();
-      draw();
+      function loop() {
+        ctx.clearRect(0, 0, W, H);
+        snowflakes.forEach(f => { f.update(); f.draw(); });
+        requestAnimationFrame(loop);
+      }
+      init(); loop();
     })();
-    
-    // ナビなど既存のスクリプト
+
+    // Navbar, Scroll Top, Hamburger
     const navbar = document.getElementById('navbar');
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('nav-links');
     const scrollTop = document.getElementById('scrollTop');
+
     window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 50);
-      scrollTop.style.display = window.scrollY > 300 ? 'flex' : 'none';
+      navbar.classList.toggle('scrolled', scrollY > 50);
+      scrollTop.style.display = scrollY > 300 ? 'flex' : 'none';
     });
     hamburger.addEventListener('click', () => {
       const open = navLinks.classList.toggle('active');
       hamburger.setAttribute('aria-expanded', open);
+      navLinks.setAttribute('aria-hidden', !open);
     });
-    scrollTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
-    document.querySelectorAll('.modal-close').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.target.closest('.modal').setAttribute('aria-hidden','true');
-      });
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.modal[aria-hidden="false"]').forEach(m => m.setAttribute('aria-hidden','true'));
-      }
-    });
+    scrollTop.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
   </script>
 </body>
 </html>
